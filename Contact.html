@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact US</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./contact.css">
+
+</head>
+
+<body>
+  <header class="navbar">
+    <nav class="nav">
+      <a href="" class="logo">KISHKAM <span>|Robotics Lab</span></a>
+      <ul class="nav-links">
+        <li><a href="./Kishkam Robotics Lab.html">Home</a></li>
+        <li><a href="./Career.html">Career</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <h2>Contact Us</h2>
+  <form id="contactForm">
+    <label for="Name">Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter Your Name">
+    <small class="error" id="nameError"></small><br>
+    <label for="Email">Email</label>
+    <input type="email" name="email" id="email" placeholder="Your Email">
+    <small class="error" id="emailError"></small>
+    <br>
+    <label for="Message">Message</label>
+    <textarea name="Message" id="message"></textarea>
+    <small class="error" id="messageError"></small>
+    <button type="submit">Send Message</button>
+
+  </form>
+  <div id="successMessage" class="success-msg"></div>
+
+  <script>
+    const form = document.getElementById("contactForm");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const messageInput = document.getElementById("message");
+
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const messageError = document.getElementById("messageError");
+
+    const successMessage = document.getElementById("successMessage");
+
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      nameError.textContent = "";
+      emailError.textContent = "";
+      messageError.textContent = "";
+      successMessage.textContent = "";
+
+      let valid = true;
+
+      if (nameInput.value.trim() === "") {
+        nameError.textContent = "Name is required";
+        valid = false;
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailInput.value.trim() === "") {
+        emailError.textContent = "Email is required";
+        valid = false;
+      } else if (!emailPattern.test(emailInput.value.trim())) {
+        emailError.textContent = "Enter a valid email";
+        valid = false;
+      }
+
+      if (messageInput.value.trim() === "") {
+        messageError.textContent = "Message is required";
+        valid = false;
+      }
+
+      if (valid) {
+        const submission = JSON.parse(localStorage.getItem("contactSubmission") || "[]");
+        submission.push({
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          message: messageInput.value.trim(),
+          submittedAt: new Date().toISOString()
+        });
+
+        localStorage.getItem("contactSubmissions", JSON.stringify(submission));
+
+        successMessage.textContent = "Your message has been sent successfully!";
+        successMessage.style.display = "block";
+
+        form.reset();
+
+      }
+    })
+
+
+  </script>
+</body>
+
+</html>
